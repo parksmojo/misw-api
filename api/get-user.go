@@ -56,11 +56,11 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 		GamesLost:    gamesLost,
 		AverageMoves: averageMoves,
 	}
-	w.Header().Set("Content-Type", "application/json")
 	jsonBytes, err := json.Marshal(response)
 	if err != nil {
 		http.Error(w, "Failed to encode user", http.StatusInternalServerError)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsonBytes)
 }
