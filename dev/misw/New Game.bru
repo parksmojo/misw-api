@@ -6,8 +6,16 @@ meta {
 
 put {
   url: http://localhost:8321/game
-  body: none
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+    "width": 30,
+    "height": 30,
+    "bombCount": 30
+  }
 }
 
 settings {
