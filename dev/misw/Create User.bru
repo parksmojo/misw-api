@@ -1,0 +1,27 @@
+meta {
+  name: Create User
+  type: http
+  seq: 1
+}
+
+put {
+  url: http://localhost:8321/auth/user
+  body: json
+  auth: basic
+}
+
+auth:basic {
+  username: 
+  password: 
+}
+
+body:json {
+  {
+    "username":"parksmojo",
+    "password":"asdf"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

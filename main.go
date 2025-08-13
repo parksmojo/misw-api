@@ -19,8 +19,10 @@ func main() {
 
   err = db.Init()
   if err != nil {
-    log.Fatal("Error initializing database" + err.Error())
+    log.Fatal("Error initializing database: " + err.Error())
   }
+
+  http.Handle("PUT /auth/user", http.HandlerFunc(api.CreateUserHandler))
 
   http.Handle("POST /game", http.HandlerFunc(api.MakeMoveHandler))
   http.Handle("PUT /game", http.HandlerFunc(api.NewGameHandler))
