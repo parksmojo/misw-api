@@ -1,0 +1,20 @@
+meta {
+  name: Get user
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8321/auth/user
+  body: none
+  auth: basic
+}
+
+auth:basic {
+  username: parksmojo
+  password: asdf
+}
+
+settings {
+  encodeUrl: true
+}

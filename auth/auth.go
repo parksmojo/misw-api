@@ -2,7 +2,6 @@ package auth
 
 import (
 	"encoding/base64"
-	"fmt"
 	"misw/db"
 	"misw/model"
 	"net/http"
@@ -11,20 +10,23 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func ValidateRequestingUser(r *http.Request, conn *pgx.Conn) (*model.User, error) {
+func ValidateRequestingUser(w http.ResponseWriter, r *http.Request, conn *pgx.Conn) *model.User {
 	header := r.Header.Get("Authorization")
 	if header == "" || len(header) < 6 || header[:6] != "Basic " {
-		return nil, fmt.Errorf("Unauthorized")
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return nil
 	}
 
 	payload, err := base64.StdEncoding.DecodeString(header[6:])
 	if err != nil {
-		return nil, fmt.Errorf("Unauthorized")
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return nil
 	}
 
 	pair := strings.SplitN(string(payload), ":", 2)
 	if len(pair) != 2 {
-		return nil, fmt.Errorf("Unauthorized")
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return nil
 	}
 
 	username := pair[0]
@@ -32,8 +34,9 @@ func ValidateRequestingUser(r *http.Request, conn *pgx.Conn) (*model.User, error
 
 	user, err := db.GetUser(conn, username, password)
 	if(err != nil){
-		return nil, err;
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return nil;
 	}
 
-	return user, nil;
+	return user;
 }

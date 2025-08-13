@@ -29,8 +29,9 @@ func Init() error {
       height INTEGER NOT NULL,
       number_of_bombs INTEGER NOT NULL,
       number_of_moves INTEGER DEFAULT 0,
-      bomb_locations TEXT[][],
-      board TEXT[][]
+      bomb_locations TEXT[][] NOT NULL,
+      board TEXT[][] NOT NULL,
+      won BOOLEAN
     );
 
     CREATE OR REPLACE FUNCTION update_updated_at_column()
