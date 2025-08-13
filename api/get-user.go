@@ -18,7 +18,6 @@ type UserStatsResponse struct {
 func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	conn := db.OpenConnection()
 	defer db.CloseConnection(conn)
-
 	user := auth.ValidateRequestingUser(w, r, conn)
 	if user == nil {
 		return

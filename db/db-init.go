@@ -29,7 +29,7 @@ func Init() error {
       height INTEGER NOT NULL,
       number_of_bombs INTEGER NOT NULL,
       number_of_moves INTEGER DEFAULT 0,
-      bomb_locations TEXT[][] NOT NULL,
+      bomb_locations JSONB NOT NULL,
       board TEXT[][] NOT NULL,
       won BOOLEAN
     );

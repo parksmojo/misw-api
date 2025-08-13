@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"encoding/json"
 	"misw/model"
 
 	"github.com/jackc/pgx/v5"
@@ -36,4 +37,24 @@ func GetGamesForUser(conn *pgx.Conn, userID int) ([]model.Game, error) {
 		games = append(games, game)
 	}
 	return games, nil
+}
+
+func CreateGame(conn *pgx.Conn, userID, width, height, bombCount int, bombLocations []model.Coord, board [][]string) (int, error) {
+	bombsJSON, err := json.Marshal(bombLocations)
+	if err != nil {
+		return -1, err
+	}
+
+	var gameID int
+	err = conn.QueryRow(
+		context.Background(),
+		`INSERT INTO games (user_id, width, height, number_of_bombs, bomb_locations, board)
+		 VALUES ($1, $2, $3, $4, $5, $6)
+		 RETURNING id`,
+		userID, width, height, bombCount, bombsJSON, board,
+	).Scan(&gameID)
+	if err != nil {
+		return -1, err
+	}
+	return gameID, nil
 }

@@ -25,8 +25,8 @@ func main() {
   http.Handle("PUT /auth/user", http.HandlerFunc(api.CreateUserHandler))
   http.Handle("GET /auth/user", http.HandlerFunc(api.GetUserHandler))
 
-  http.Handle("POST /game", http.HandlerFunc(api.MakeMoveHandler))
   http.Handle("PUT /game", http.HandlerFunc(api.NewGameHandler))
+  http.Handle("POST /game", http.HandlerFunc(api.MakeMoveHandler))
 
   fmt.Println("Listening on port 8321")
   log.Fatal(http.ListenAndServe(":8321", nil))

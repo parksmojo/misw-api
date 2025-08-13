@@ -2,6 +2,11 @@ package model
 
 import "time"
 
+type Coord struct {
+	X int `json:"x"`
+	Y int `json:"y"`
+}
+
 type Game struct {
 	ID              int         `json:"id"`
 	CreatedAt       time.Time   `json:"created_at"`
@@ -13,7 +18,7 @@ type Game struct {
 	Height          int         `json:"height"`
 	NumberOfBombs   int         `json:"number_of_bombs"`
 	NumberOfMoves   int         `json:"number_of_moves"`
-	BombLocations   [][]string  `json:"bomb_locations"`
+	BombLocations   []Coord     `json:"bomb_locations"`
 	Board           [][]string  `json:"board"`
 	Won             *bool       `json:"won"`
 }
