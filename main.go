@@ -5,12 +5,18 @@ import (
 	"log"
 	"misw/api"
 	"misw/db"
+	"misw/middleware"
 	"net/http"
 
 	"github.com/joho/godotenv"
 )
 
 const VERSION = "0.0.1"
+const PORT = "8321"
+
+func handle(route string, handler http.HandlerFunc) {
+	http.Handle(route, middleware.ApplyTo(handler))
+}
 
 func main() {
   err := godotenv.Load()
@@ -23,14 +29,14 @@ func main() {
     log.Fatal("Error initializing database: " + err.Error())
   }
 
-  Handle("GET /", api.IndexHandlerFactory(VERSION))
+  handle("GET /", api.IndexHandlerFactory(VERSION))
 
-  Handle("PUT /auth/user", api.CreateUserHandler)
-  Handle("GET /auth/user", api.GetUserHandler)
+  handle("PUT /auth/user", api.CreateUserHandler)
+  handle("GET /auth/user", api.GetUserHandler)
 
-  Handle("PUT /game", api.NewGameHandler)
-  Handle("POST /game", api.MakeMoveHandler)
+  handle("PUT /game", api.NewGameHandler)
+  handle("POST /game", api.MakeMoveHandler)
 
-  fmt.Println("Listening on port 8321")
-  log.Fatal(http.ListenAndServe(":8321", nil))
+  fmt.Printf("Listening on port %s\n", PORT)
+  log.Fatal(http.ListenAndServe(":" + PORT, nil))
 }

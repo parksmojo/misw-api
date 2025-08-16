@@ -6,16 +6,26 @@ import (
 	"time"
 )
 
-// LogRequest logs important details about each incoming HTTP request.
-func LogRequest(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+func LogRequest(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 
-		log.Printf("Started %s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
+		log.Printf("Recieved %s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 
-		next.ServeHTTP(w, r)
+		lrw := &loggingResponseWriter{ResponseWriter: w, statusCode: http.StatusOK}
+		next(lrw, r)
 
 		duration := time.Since(start)
-		log.Printf("Completed %s in %v", r.URL.Path, duration)
-	})
+		log.Printf("Finished %s %s in %v with code %d", r.Method, r.URL.Path, duration, lrw.statusCode)
+	}
+}
+
+type loggingResponseWriter struct {
+	http.ResponseWriter
+	statusCode int
+}
+
+func (lrw *loggingResponseWriter) WriteHeader(code int) {
+	lrw.statusCode = code
+	lrw.ResponseWriter.WriteHeader(code)
 }
