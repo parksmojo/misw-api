@@ -10,6 +10,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+const VERSION = "0.0.1"
 
 func main() {
   err := godotenv.Load()
@@ -22,11 +23,13 @@ func main() {
     log.Fatal("Error initializing database: " + err.Error())
   }
 
-  http.Handle("PUT /auth/user", http.HandlerFunc(api.CreateUserHandler))
-  http.Handle("GET /auth/user", http.HandlerFunc(api.GetUserHandler))
+  Handle("GET /", api.IndexHandlerFactory(VERSION))
 
-  http.Handle("PUT /game", http.HandlerFunc(api.NewGameHandler))
-  http.Handle("POST /game", http.HandlerFunc(api.MakeMoveHandler))
+  Handle("PUT /auth/user", api.CreateUserHandler)
+  Handle("GET /auth/user", api.GetUserHandler)
+
+  Handle("PUT /game", api.NewGameHandler)
+  Handle("POST /game", api.MakeMoveHandler)
 
   fmt.Println("Listening on port 8321")
   log.Fatal(http.ListenAndServe(":8321", nil))
