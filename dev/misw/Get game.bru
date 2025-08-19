@@ -1,10 +1,10 @@
 meta {
-  name: New Game
+  name: Get game
   type: http
-  seq: 3
+  seq: 5
 }
 
-put {
+get {
   url: http://localhost:8321/game
   body: json
   auth: inherit
@@ -12,9 +12,7 @@ put {
 
 body:json {
   {
-    "width": 3,
-    "height": 3,
-    "bombCount": 3
+    "id": 4
   }
 }
 

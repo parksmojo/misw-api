@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"misw/model"
 
 	"github.com/jackc/pgx/v5"
@@ -57,4 +58,20 @@ func CreateGame(conn *pgx.Conn, userID, width, height, bombCount int, bombLocati
 		return -1, err
 	}
 	return gameID, nil
+}
+
+func GetGame(conn *pgx.Conn, userID, gameID int) ([][]string, error) {
+	var board [][]string
+	err := conn.QueryRow(
+		context.Background(), 
+		`SELECT board FROM games WHERE user_id=$1 AND id=$2`, 
+		userID, gameID,
+	).Scan(&board)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return board, nil
 }

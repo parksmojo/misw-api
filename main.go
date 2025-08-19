@@ -34,6 +34,7 @@ func main() {
   handle("PUT /auth/user", api.CreateUserHandler)
   handle("GET /auth/user", api.GetUserHandler)
 
+  handle("GET /game", api.GetGameHandler)
   handle("PUT /game", api.NewGameHandler)
   handle("POST /game", api.MakeMoveHandler)
 
